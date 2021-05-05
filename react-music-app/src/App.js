@@ -40,7 +40,7 @@ function App() {
   return (
     <div className="App">
       <Nav libraryStatus={libraryStatus} setLibraryStatus={setLibraryStatus} />
-      <Song currentSong={currentSong} />
+      <Song currentSong={currentSong} isPlaying={isPlaying} songInfo={songInfo}/>
       <Player
         audioRef={audioRef}
         setIsPlaying={setIsPlaying}
