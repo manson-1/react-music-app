@@ -6,6 +6,7 @@ import {
   faAngleRight,
   faPause,
 } from "@fortawesome/free-solid-svg-icons";
+import { playAudio } from "../util";
 
 const Player = ({
   setSongInfo,
@@ -41,6 +42,7 @@ const Player = ({
     if (isPlaying) {
       audioRef.current.pause(); // play() = standard HTML function
       setIsPlaying(false);
+      
     } else {
       audioRef.current.play(); // play() = standard HTML function
       setIsPlaying(true);
@@ -71,6 +73,13 @@ const Player = ({
     if (direction === "skip-forward") {
       setCurrentSong(songs[(currentIndex + 1) % songs.length]);
     }
+
+    playAudio(isPlaying, audioRef);
+  };
+
+  // Add styles
+  const trackAnim = {
+    transform: `translateX(${songInfo.animationPercentage}%)`,
   };
 
   // format time nicely
@@ -84,14 +93,23 @@ const Player = ({
     <div className="player">
       <div className="time-control">
         <p>{getTime(songInfo.currentTime)}</p>
-        <input
-          onChange={dragHandler}
-          min={0}
-          max={isNaN(songInfo.duration) ? 0 : songInfo.duration}
-          value={songInfo.currentTime}
-          type="range"
-        />
-        <p>{getTime(songInfo.duration)}</p>
+        <div
+          style={{
+            background:
+              `linear-gradient(to right, ${currentSong.color[0]}, ${currentSong.color[1]})`,
+          }}
+          className="track"
+        >
+          <input
+            onChange={dragHandler}
+            min={0}
+            max={isNaN(songInfo.duration) ? 0 : songInfo.duration}
+            value={songInfo.currentTime}
+            type="range"
+          />
+          <div style={trackAnim} className="animate-track"></div>
+        </div>
+        <p>{songInfo.duration ? getTime(songInfo.duration) : "0:00"}</p>
       </div>
       <div className="play-control">
         <FontAwesomeIcon
